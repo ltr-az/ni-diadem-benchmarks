@@ -33,18 +33,20 @@ Private Sub Class_Initialize( )
     state = "stop"
 end sub
 
-Private Sub Class_close
+Private Sub Class_Terminate
   Set wshShell = Nothing
 end sub
 
 function elapsed()
   endTime = now
-  elapsed = DateDiff("s", startTime, endTime) + elapsedTime
-
+  if (state = "halt") then
+    elapsed = elapsedTime
+  else
+    elapsed = DateDiff("s", startTime, endTime) + elapsedTime
+  end if
 end function
 
 function start()
-  elapsedTime = 0
   state = "start"
   startTime = now
 end function
@@ -55,9 +57,10 @@ function reset()
   state = "stop"
 end function
 
-function halt()
+function halt()  
   state = "halt"
-  elapsedTime = DateDiff("s", startTime, endTime)
+  endTime = now
+  elapsedTime = DateDiff("s", startTime, endTime) + elapsedTime
 end function
 end class
 
@@ -87,6 +90,20 @@ function unit_test()
   logfilewrite("T1 delay 2: " & oMyTimer1.elapsed)
   oMyTimer1.delay 3  
   logfilewrite("T1 delay 3: " & oMyTimer1.elapsed)
- 
+  oMyTimer1.reset
+  oMytimer1.start
+  oMyTimer1.delay 1
+  logfilewrite("T1 delay 1: " & oMyTimer1.elapsed)
+  oMyTimer1.delay 2
+  logfilewrite("T1 delay 2: " & oMyTimer1.elapsed)
+  oMyTimer1.halt
+  oMyTimer1.delay 3
+  oMyTimer1.start
+  logfilewrite("T1 delay 3: " & oMyTimer1.elapsed)
+  oMyTimer1.delay 4
+  logfilewrite("T1 delay 4: " & oMyTimer1.elapsed)
+
+  
+
  
 end function
