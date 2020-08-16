@@ -13,20 +13,43 @@ Data.Root.Clear
 Dim oScriptCollection : Set oScriptCollection = CreateObject("System.Collections.ArrayList")
 Dim currentScript
 Dim myPath
+Dim testNo
+Dim time_start
+Dim time_end
 
 myPath = CurrentScriptPath
 
 Call oScriptCollection.Add("Basic Search")
 Call oScriptCollection.Add("Indexing")
+Call oScriptCollection.Add("file_io")
 
 Data.Root.Clear
 call getPCinfo()
 
+Set time_start = Data.Root.Properties.Add ("test~start", now,DataTypeDate)
+testNo = 1
 for each currentScript in oScriptCollection
-  Call ScriptInclude(myPath & currentScript, "Benchmark") 
+  Call ScriptInclude(myPath & currentScript, "Benchmark")
+  
+  logfilewrite("--- BEGING ---")
+  logfilewrite("Test " & testNo & " " & currentScript)
   Call Benchmark.main()
+  logfilewrite("--- END ---")
+  testNo = testNo + 1
   
 next
+
+call getPCinfo()
+
+Data.Root.Name = "DIAdem Benchmark"
+Call Data.Root.Properties.Add ("version~major", 0,DataTypeInt16)
+Call Data.Root.Properties.Add ("version~minor", 0,DataTypeInt16)
+Call Data.Root.Properties.Add ("cm_ref", "https://github.com/ltr-az/ni-diadem-benchmarks",DataTypeString)
+Set time_end = Data.Root.Properties.Add ("test~end", now,DataTypeDate)
+Call Data.Root.Properties.Add ("test~time", DateDiff("s",time_end.Value,time_start.Value),DataTypeInt32)
+logfileWrite ""
+logfileWrite "*** Benchmark complete ***"
+logfileWrite ""
 
 sub getPCinfo()
 

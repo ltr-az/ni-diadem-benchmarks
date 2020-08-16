@@ -75,7 +75,7 @@ for i = 1 to currentDF.ResultsList.ResultsElements.Count
   if runTime = 0 then
     runTime = 1
   end if
- if i mod 100 = 1 then
+ if i mod 10 = 0 then
   logFileWrite("File " & i & " of " & currentDF.ResultsList.ResultsElements.Count & ") Reindexing: " &  Round(i / runTIme,2) & " files/sec   elapsed: " & oTimerOverall.elapsed)
   end if
 
