@@ -8,20 +8,23 @@ Option Explicit  'Forces the explicit declaration of all the variables in a scri
 
 Data.Root.Clear
 
-
-
 Dim oScriptCollection : Set oScriptCollection = CreateObject("System.Collections.ArrayList")
 Dim currentScript
 Dim myPath
 Dim testNo
 Dim time_start
 Dim time_end
+Dim myDate
+Dim myFile
 
 myPath = CurrentScriptPath
 
+
+'Setup tests to run.
 Call oScriptCollection.Add("Basic Search")
 Call oScriptCollection.Add("Indexing")
 Call oScriptCollection.Add("file_io")
+Call oScriptCollection.Add("sort")
 
 Data.Root.Clear
 call getPCinfo()
@@ -39,6 +42,18 @@ for each currentScript in oScriptCollection
   
 next
 
+myDate = now
+myDate = Year(myDate) & Month(myDate) & Day(myDate) & "_" & Hour(myDate) & Minute(myDate) & Second(myDate)
+msgBox(myDate)
+
+myFile = "DIAdem Benchmark " & myDate
+DataFileSave myFile
+
+Call commit(myFile)
+
+
+
+
 call getPCinfo()
 
 Data.Root.Name = "DIAdem Benchmark"
@@ -47,9 +62,23 @@ Call Data.Root.Properties.Add ("version~minor", 0,DataTypeInt16)
 Call Data.Root.Properties.Add ("cm_ref", "https://github.com/ltr-az/ni-diadem-benchmarks",DataTypeString)
 Set time_end = Data.Root.Properties.Add ("test~end", now,DataTypeDate)
 Call Data.Root.Properties.Add ("test~time", DateDiff("s",time_end.Value,time_start.Value),DataTypeInt32)
-logfileWrite ""
+
+'****************************************
 logfileWrite "*** Benchmark complete ***"
-logfileWrite ""
+'****************************************
+
+
+Sub commit(myFile)
+
+'Take the file that was saved add it to Git, commit, push
+Dim gitSh
+
+Set gitSh = createObject("WScript.Shell")
+gitSh.Run "git add " & myFile
+gitSh.Run "git commit -m """dataset added"""
+gitSh.Run "git push"
+
+end Sub
 
 sub getPCinfo()
 
