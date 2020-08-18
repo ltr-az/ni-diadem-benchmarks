@@ -16,6 +16,7 @@ Dim time_start
 Dim time_end
 Dim myDate
 Dim myFile
+Dim myFilePath
 
 myPath = CurrentScriptPath
 
@@ -42,16 +43,6 @@ for each currentScript in oScriptCollection
   
 next
 
-myDate = now
-myDate = Year(myDate) & Month(myDate) & Day(myDate) & "_" & Hour(myDate) & Minute(myDate) & Second(myDate)
-msgBox(myDate)
-
-myFile = "DIAdem Benchmark " & myDate
-DataFileSave myFile
-
-Call commit(myFile)
-
-
 
 
 call getPCinfo()
@@ -61,22 +52,54 @@ Call Data.Root.Properties.Add ("version~major", 0,DataTypeInt16)
 Call Data.Root.Properties.Add ("version~minor", 0,DataTypeInt16)
 Call Data.Root.Properties.Add ("cm_ref", "https://github.com/ltr-az/ni-diadem-benchmarks",DataTypeString)
 Set time_end = Data.Root.Properties.Add ("test~end", now,DataTypeDate)
-Call Data.Root.Properties.Add ("test~time", DateDiff("s",time_end.Value,time_start.Value),DataTypeInt32)
+Call Data.Root.Properties.Add ("test~time", DateDiff("s",time_start.Value, time_end.Value),DataTypeInt32)
+
+myDate = now
+myDate = Year(myDate) & Month(myDate) & Day(myDate) & "_" & Hour(myDate) & Minute(myDate) & Second(myDate)
+
+
+'Save to folder with datasets
+myFile = "DIAdem_Benchmark_" & myDate
+myFilePath = myPath & "datasets\" & myFile
+logfilewrite("Saving: " & myFilePath)
+DataFileSave myFilePath
+
+
+
+
 
 '****************************************
 logfileWrite "*** Benchmark complete ***"
 '****************************************
 
 
+Call commit(myFile)
+
+
+
 Sub commit(myFile)
 
 'Take the file that was saved add it to Git, commit, push
 Dim gitSh
+Dim intResult
+Dim cmd
 
-Set gitSh = createObject("WScript.Shell")
-gitSh.Run "git add " & myFile
-gitSh.Run "git commit -m """dataset added"""
-gitSh.Run "git push"
+'For now just dump the git commands to commit your results.
+
+
+logfileWrite("---------")
+logfileWrite("Commit:")
+logFileWrite("cd to .\datasets")
+logFileWrite("run the commands below or use your git tool of choice to commit the TDM files.")
+logfileWrite("---------")
+cmd = "git add " & myFile & ".TDM"
+logfileWrite(cmd)
+
+cmd = "git commit -m dataset"
+logfileWrite(cmd)
+
+cmd = "git push"
+logfileWrite(cmd)
 
 end Sub
 
