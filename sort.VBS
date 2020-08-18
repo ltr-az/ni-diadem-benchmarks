@@ -157,7 +157,7 @@ Set myProp = myGrp.Properties.Add("mean elapsed", myCh.Properties("Result~Statis
 Set myProp = myGrp.Properties.Add("mean rate", myChannelRate.properties("Result~Statistics~MeanValues~ArithmeticMean").Value, DataTypeFloat32)
 logfilewrite(myProp.Name & " = " & myProp.Value & " rate")
 
-Set myProp = myGrp.Properties.Add("mean rate", myChannelElements.properties("Result~Statistics~MeanValues~ArithmeticMean").Value, DataTypeFloat32)
+Set myProp = myGrp.Properties.Add("mean element size", myChannelElements.properties("Result~Statistics~MeanValues~ArithmeticMean").Value, DataTypeFloat32)
 logfilewrite(myProp.Name & " = " & myProp.Value & " element count")
 
 
