@@ -9,7 +9,7 @@ Started to think we need a bench marking tool to be able to compare relative per
 Goals:
 Use the example supplied with DIAdem if installed...
 
-Basic search:
+<b>Basic search:</b>
 
 Setup
 - Search for all files in the example folder
@@ -19,28 +19,29 @@ Setup
 Figure of merit
 Run this iteratively for 120 seconds then report the number of iterations and the run rate.
 
-Indexing:
+<b>Indexing:</b>
+
 Setup
-- Search for all indexed properties in the example dataset.
-- Save which are indexed.
-- unindex all the indexed items
-- then index them again.
+- find all the files in the examples.
+- then re-index each file
 
-repeat this for TBD time.  
-Figure of merit
-store the number of runs in TBD time.
+The amount of time it takes to re-index all files and the time per files.
 
 
-File Access:
+<b>File IO:</b>
+Setup
+- Find all the tdm and TDMS files in the example dataset
 
-Find N number of FILES from the dataset
-- Open, get the File size
-- save a copy
-- delete the copy
+Load each file 
+Save each file to C:\temp
+remove the channelGroups added
+repeat for each file in the example dataset
+repeat this run 5 times.
 
-Keep total of file cound and bytes written/read
+output :
+files per second
+bytes per second
+elapsed time
 
 Figure of merit:
-- read MB/sec
-- write MB/sec
-
+- Bytes / second
