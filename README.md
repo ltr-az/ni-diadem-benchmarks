@@ -54,7 +54,7 @@ Figure of merit:
 Setup
 - Loads all the examples data into the portal by file
 
-Test steps iterate through 5 times.
+Test steps iterate through 3 times.
 - go through each channel and sort ascending and then sort decending
 - keep cummulated number of elements sorted.
 - record the time to sort for each iteration in a channel
